@@ -10,18 +10,18 @@ function App() {
 
   const onLightTheme = () => {
     setTheme("light");
-    setBackground("bg-light text-dark vh-100 vw-100");
+    setBackground("bg-light text-dark");
   };
 
   const onDarkTheme = () => {
     setTheme("dark");
-    setBackground("bg-dark text-light vh-100 vw-100");
+    setBackground("bg-dark text-light");
   };
 
   return (
     <Container fluid>
       <Row>
-        <Navbar bg="primary" data-bs-theme="dark" className="justify-content-between">
+        <Navbar bg="secondary" data-bs-theme="dark" className="vw-100 justify-content-between">
           <Nav>
             <Navbar.Brand className="p-2">WEST IoT Dashboard</Navbar.Brand>
           </Nav>
