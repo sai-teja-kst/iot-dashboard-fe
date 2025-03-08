@@ -1,19 +1,24 @@
-import { useState, useEffect } from "react";
+import { Col, Button } from "react-bootstrap";
 
-export const Status = ({ data }) => {
-  const [timestamp, setTimestamp] = useState("");
-
-  useEffect(() => {
-    console.log(data);
-    setTimestamp(data.timestamp);
-  }, [data]);
-
+export const Status = () => {
   return (
-    <div className="mt-3">
-      <p>Device: IoT Device 1</p>
-      <p>Status: Active</p>
-      <p>Cloud: Azure Cloud</p>
-      <p>Timestamp: {timestamp}</p>
-    </div>
+    <Col xs={12}>
+      <Col
+        lg={6}
+        className="border border-primary p-3 mt-3 rounded"
+        style={{ height: "40vh" }}
+      >
+        <h1>Temperature </h1>
+        <div>
+          <Button className="me-2" variant="primary" size="sm">
+            Last 10 mins
+          </Button>
+          <Button className="me-2" variant="primary" size="sm">
+            Last 1 hour
+          </Button>
+        </div>
+
+      </Col>
+    </Col>
   );
 };

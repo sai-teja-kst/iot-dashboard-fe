@@ -6,22 +6,22 @@ import "./index.css";
 
 function App() {
   const [theme, setTheme] = useState("light");
-  const [background, setBackground] = useState("light");
+  const [background, setBackground] = useState("bg-light bg-gradient text-dark");
 
   const onLightTheme = () => {
     setTheme("light");
-    setBackground("bg-light text-dark");
+    setBackground("bg-light bg-gradient text-dark");
   };
 
   const onDarkTheme = () => {
     setTheme("dark");
-    setBackground("bg-dark text-light");
+    setBackground("bg-dark bg-gradient text-light");
   };
 
   return (
     <Container fluid>
       <Row>
-        <Navbar bg="secondary" data-bs-theme="dark" className="vw-100 justify-content-between">
+        <Navbar bg="primary" data-bs-theme="dark" className="bg-gradient shadow-lg vw-100 justify-content-between bg-opacity-75">
           <Nav>
             <Navbar.Brand className="p-2">WEST IoT Dashboard</Navbar.Brand>
           </Nav>
