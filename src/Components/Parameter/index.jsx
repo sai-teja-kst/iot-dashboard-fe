@@ -12,13 +12,6 @@ export const Parameter = () => {
           <p>Cloud: Azure</p>
         </Col>
       </Row>
-      <Row>
-        <Col lg={6}>
-          <Card>
-            <h1>hello</h1>
-          </Card>
-        </Col>
-      </Row>
     </Col>
   );
 };
