@@ -93,6 +93,7 @@ export const ParameterGraph = () => {
   return (
     <Container className="p-3">
       <h1 className="text-center">Graph</h1>
+
       <Row className="align-items-center justify-content-between">
         <Col xs="auto">
           <DropdownButton title={`Parameter: ${parameter}`} size="sm" variant="outline-primary">
