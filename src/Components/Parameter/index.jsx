@@ -20,7 +20,6 @@ export const Parameter = () => {
           <Col lg={12}>
             <div
               className="shadow-lg rounded border m-1"
-              style={{ minHeight: "50vh", maxHeight: "80vh" }}
             >
               <ParameterGraph/>
             </div>
