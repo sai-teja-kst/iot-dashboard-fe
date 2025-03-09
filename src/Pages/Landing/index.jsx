@@ -1,17 +1,37 @@
 import { Col, Row } from "react-bootstrap";
-import { StatusCard } from "../../Components/StatusCard";
-import { Status } from "../../Components/Status";
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
+import { RealTimeCard } from "../../Components/RealTimeCard";
+import { Parameter } from "../../Components/Parameter";
+
 export const Landing = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(() => {
+    const savedData = localStorage.getItem("latestData");
+    return savedData ? JSON.parse(savedData) : {};
+  });
+
+  const fetchLatestData = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/v1/west/lastest`);
+      if (!response.ok) throw new Error("Failed to fetch data");
+
+      const latestData = await response.json();
+      setData(latestData);
+      localStorage.setItem("latestData", JSON.stringify(latestData));
+    } catch (error) {
+      console.error("Error fetching latest data:", error);
+    }
+  };
 
   useEffect(() => {
+    fetchLatestData();
+
     const socket = io(process.env.REACT_APP_BACKEND_URI);
 
     socket.on("data", (newData) => {
       setData(newData);
+      localStorage.setItem("latestData", JSON.stringify(newData));
     });
 
     return () => {
@@ -23,10 +43,10 @@ export const Landing = () => {
     <Col lg={6} className="vw-100 mb-2">
       <Row>
         <Col lg={9}>
-          <Status data={data} />
+          <Parameter />
         </Col>
         <Col lg={3} gap={2}>
-          <StatusCard
+          <RealTimeCard
             title="Temperature"
             dataValue={data.temperature}
             minValue={15}
@@ -34,7 +54,7 @@ export const Landing = () => {
             unit="C"
             timestamp={data.timestamp}
           />
-          <StatusCard
+          <RealTimeCard
             title="Humidity"
             dataValue={data.humidity}
             minValue={0}
@@ -42,7 +62,7 @@ export const Landing = () => {
             unit="%"
             timestamp={data.timestamp}
           />
-          <StatusCard
+          <RealTimeCard
             title="Pressure"
             dataValue={data.pressure}
             minValue={950}
