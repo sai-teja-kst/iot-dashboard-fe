@@ -52,7 +52,7 @@ export const RealTimeCard = ({
   return (
     <Col
       xs={12}
-      className="border rounded shadow-lg text-center text-light bg-primary bg-gradient p-3 mt-2 bg-opacity-75"
+      className="border rounded shadow-lg text-center bg-transparent bg-gradient p-3 mt-2 bg-opacity-75"
       style={{ minHeight: "18rem" }}
     >
       <Row>
