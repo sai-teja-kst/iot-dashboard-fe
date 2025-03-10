@@ -3,10 +3,6 @@ import React from "react";
 import { ParameterGraph } from "../ParameterGraph";
 
 export const Parameter = () => {
-  const parameterlist = ["temperature", "humidity", "pressure", "co2Gas"];
-
-  console.log(parameterlist);
-
   return (
     <Col xs={12}>
       <Row>
