@@ -43,7 +43,7 @@ export const Landing = () => {
     <Col lg={6} className="vw-100 mb-2">
       <Row>
         <Col lg={9}>
-          <Parameter />
+          <Parameter timestamp={data.timestamp}/>
         </Col>
         <Col lg={3} gap={2}>
           <RealTimeCard

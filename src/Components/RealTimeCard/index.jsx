@@ -49,6 +49,9 @@ export const RealTimeCard = ({
     },
   };
 
+  const timestamparr = timestamp.split("T")
+  console.log(timestamparr)
+
   return (
     <Col
       xs={12}
@@ -95,8 +98,9 @@ export const RealTimeCard = ({
 
           {timestamp ? (
             <>
-              <p>Last Data Recieved on: </p>
-              <small>{timestamp}</small>
+              <small>Date: {timestamparr[0]}</small>
+              <br/>
+              <small>Time: {timestamparr[1].slice(0,8)}</small>
             </>
           ) : (
             <Placeholder as="p" animation="glow">

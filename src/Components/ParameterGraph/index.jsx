@@ -7,6 +7,7 @@ import {
   InputGroup,
   Row,
   Container,
+  Spinner
 } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
 import {
@@ -141,8 +142,8 @@ export const ParameterGraph = () => {
         </Col>
       </Row>
 
-      <div className="mt-2">
-        {loading && <p>Loading...</p>}
+      <div className="mt-2 text-center">
+        {loading && <Spinner/>}
         {error && <p className="text-danger">{error}</p>}
         {data && <Line data={chartData} options={chartOptions} />}
       </div>
