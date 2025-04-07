@@ -28,13 +28,15 @@ export const RealTimeCard = ({
       ? value - minValue
       : minValue;
   const remain = maxValue - (value !== "--" ? value : minValue);
+  const percentage = ((value - minValue) / (maxValue - minValue)) * 100;
+  const isAboveThreshold = percentage > 75;
 
   const chartData = {
     labels: ["Current", "Remaining"],
     datasets: [
       {
         data: [current, remain],
-        backgroundColor: ["skyblue", "grey"],
+        backgroundColor: [isAboveThreshold ? "red" : "green", "gray"],
         borderWidth: 0,
         rotation: 225,
         circumference: 270,
@@ -49,8 +51,7 @@ export const RealTimeCard = ({
     },
   };
 
-  const timestamparr = timestamp.split("T")
-  console.log(timestamparr)
+  const timestamparr = timestamp && timestamp.split("T");
 
   return (
     <Col
@@ -65,9 +66,7 @@ export const RealTimeCard = ({
               <Doughnut data={chartData} options={options} />
               <h4>
                 {value}
-                {title === "Temperature" && (<span>&deg;</span>)}
-                {' '}
-                {unit}
+                {title === "Temperature" && <span>&deg;</span>} {unit}
               </h4>
             </>
           ) : (
@@ -82,25 +81,25 @@ export const RealTimeCard = ({
             </>
           )}
         </Col>
-        <Col xs={12} lg={7} className="justify-content-between align-items-between">
+        <Col
+          xs={12}
+          lg={7}
+          className="justify-content-between align-items-between"
+        >
           <h3>{title}</h3>
           <p>
             Min: {minValue}
-            {title === "Temperature" && (<span>&deg;</span>)}
-            {" "}
-            {unit}
+            {title === "Temperature" && <span>&deg;</span>} {unit}
             <br />
             Max: {maxValue}
-            {title === "Temperature" && (<span>&deg;</span>)}
-            {" "}
-            {unit}
+            {title === "Temperature" && <span>&deg;</span>} {unit}
           </p>
 
           {timestamp ? (
             <>
               <small>Date: {timestamparr[0]}</small>
-              <br/>
-              <small>Time: {timestamparr[1].slice(0,8)}</small>
+              <br />
+              <small>Time: {timestamparr[1].slice(0, 8)}</small>
             </>
           ) : (
             <Placeholder as="p" animation="glow">

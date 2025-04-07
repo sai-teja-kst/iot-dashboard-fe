@@ -93,7 +93,7 @@ export const ParameterGraph = () => {
 
   return (
     <Container className="p-3">
-      <h1 className="text-center">Graph</h1>
+      <h3 className="text-center">Graph</h3>
 
       <Row className="align-items-center justify-content-between">
         <Col xs="auto">
@@ -142,7 +142,7 @@ export const ParameterGraph = () => {
         </Col>
       </Row>
 
-      <div className="mt-2 text-center">
+      <div className="mt-2 text-center" style={{overflowY: "auto", overflowX: "auto"}}>
         {loading && <Spinner/>}
         {error && <p className="text-danger">{error}</p>}
         {data && <Line data={chartData} options={chartOptions} />}

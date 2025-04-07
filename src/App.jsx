@@ -1,14 +1,39 @@
-import { Container, Navbar, Nav, Row, Col, Button } from "react-bootstrap";
+import {
+  Container,
+  Navbar,
+  Nav,
+  Row,
+  Col,
+  Button,
+  Tab,
+  Badge,
+  Collapse,
+  NavDropdown,
+} from "react-bootstrap";
 import { Landing } from "./Pages/Landing";
-import { FaMoon, FaSun } from "react-icons/fa";
+import {
+  FaAngleDown,
+  FaAngleUp,
+  FaCar,
+  FaDatabase,
+  FaHome,
+  FaMoon,
+  FaSun,
+} from "react-icons/fa";
 import { useState } from "react";
 import "./index.css";
 import { ChatBot } from "./Pages/ChatBot";
-import { FaMessage } from "react-icons/fa6";
+import { FaGear, FaMessage, FaScrewdriverWrench } from "react-icons/fa6";
+import { Plant } from "./Pages/Plant";
+import { Tools } from "./Pages/Tools";
 
 function App() {
   const [theme, setTheme] = useState("light");
-  const [background, setBackground] = useState("bg-light bg-gradient text-dark");
+  const [subshow, setSubShow] = useState(false);
+
+  const [background, setBackground] = useState(
+    "bg-light bg-gradient text-dark"
+  );
 
   const onLightTheme = () => {
     setTheme("light");
@@ -20,25 +45,30 @@ function App() {
     setBackground("bg-dark bg-gradient text-light");
   };
 
-  const [show, setShow] = useState(false);
-  const toggleShow = () => setShow(!show);
-
   return (
     <Container fluid>
       <Row>
-        <Navbar bg="primary" data-bs-theme="dark" className="bg-gradient shadow-lg vw-100 justify-content-between bg-opacity-75">
+        <Navbar
+          bg="primary"
+          data-bs-theme="dark"
+          className="bg-gradient shadow-lg vw-100 justify-content-between"
+          style={{ maxHeight: "10vh" }}
+        >
           <Nav>
-            <Navbar.Brand className="p-2">WEST IoT Dashboard</Navbar.Brand>
+            <Navbar.Brand className="p-2">
+              {" "}
+              <small>IoT Dashboard</small>
+            </Navbar.Brand>
           </Nav>
           <Nav className="ml-auto">
             <Nav.Link>
               {theme === "light" ? (
-                <Button variant="outline-dark" onClick={onDarkTheme}>
-                  <FaSun size={20} />
+                <Button variant="outline-light" onClick={onDarkTheme}>
+                  <FaSun size={15} />
                 </Button>
               ) : (
                 <Button variant="outline-light" onClick={onLightTheme}>
-                  <FaMoon size={20} />
+                  <FaMoon size={15} />
                 </Button>
               )}
             </Nav.Link>
@@ -46,28 +76,133 @@ function App() {
         </Navbar>
       </Row>
 
-      <Row className={background}>
-            <Landing/>
-      </Row>
+      <Tab.Container defaultActiveKey="landing">
+        <Row className={background}>
+          <Col xs={3} lg={1} className="mt-2 d-none d-lg-flex flex-column">
+            <Nav variant="pills" className="flex-column">
+              <Nav.Item>
+                <Nav.Link eventKey="landing">
+                  <FaHome /> <small>Home</small>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="chat">
+                  <FaMessage /> <small>Chat</small>{" "}
+                  <Badge size="sm" className="bg-danger">
+                    Beta
+                  </Badge>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => setSubShow(!subshow)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <FaDatabase /> <small>Plants</small>{" "}
+                  {subshow ? <FaAngleUp /> : <FaAngleDown />}
+                </Nav.Link>
+              </Nav.Item>
 
-      <Row className="d-none">
-      {show ? (<ChatBot/>) : (<Landing/>)}
-      </Row>
+              <Collapse in={subshow}>
+                <div>
+                  <Nav.Item>
+                    <Nav.Link eventKey="plant1">
+                      <FaGear /> <small>Zone A</small>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="plant2">
+                      <FaGear /> <small>Zone B</small>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="plant3">
+                      <FaGear /> <small>Zone C</small>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="plant4">
+                      <FaGear /> <small>Zone D</small>
+                    </Nav.Link>
+                  </Nav.Item>
+                </div>
+              </Collapse>
 
-      <Col className="floating-btn d-none">
-        <Button variant="primary m-2 shadow-lg" onClick={toggleShow}>
-          Using AI
-          <br/>Chat with your data
-        </Button>
-        <Button
-          variant="primary"
-          className="rounded-circle p-3"
-          onClick={toggleShow}
-        >
-          <FaMessage size={25} />
-        </Button>
-      </Col>
+              <Nav.Item>
+                <Nav.Link eventKey="tools">
+                  <FaScrewdriverWrench /> <small>Tools</small>
+                </Nav.Link>
+              </Nav.Item>
 
+            </Nav>
+          </Col>
+
+          <Col xs={12} lg={11} className="mt-2 mb-2">
+            <Tab.Content>
+              <Tab.Pane eventKey="landing">
+                <Landing />
+              </Tab.Pane>
+              <Tab.Pane eventKey="chat">
+                <ChatBot />
+              </Tab.Pane>
+              <Tab.Pane eventKey="plant1">
+                <Plant plant="Zone A" />
+              </Tab.Pane>
+              <Tab.Pane eventKey="plant2">
+                <Plant plant="Zone B" />
+              </Tab.Pane>
+              <Tab.Pane eventKey="plant3">
+                <Plant plant="Zone C" />
+              </Tab.Pane>
+              <Tab.Pane eventKey="plant4">
+                <Plant plant="Zone D" />
+              </Tab.Pane>
+              <Tab.Pane eventKey="tools">
+                <Tools />
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+
+        <div className="d-flex d-lg-none">
+          <Nav
+            variant="pills"
+            className="fixed-bottom bg-dark p-2 justify-content-center"
+          >
+            <Nav.Item>
+              <Nav.Link eventKey="landing">
+                <FaHome />
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="chat">
+                <FaMessage />
+              </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link eventKey="tools">
+                <FaScrewdriverWrench />
+              </Nav.Link>
+            </Nav.Item>
+
+            <NavDropdown title={<FaCar />} id="nav-dropdown">
+              <NavDropdown.Item eventKey="plant1">
+                <FaGear /> A
+              </NavDropdown.Item>
+              <NavDropdown.Item eventKey="plant2">
+                <FaGear /> B
+              </NavDropdown.Item>
+              <NavDropdown.Item eventKey="plant3">
+                <FaGear /> C
+              </NavDropdown.Item>
+              <NavDropdown.Item eventKey="plant4">
+                <FaGear /> D
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </div>
+      </Tab.Container>
     </Container>
   );
 }

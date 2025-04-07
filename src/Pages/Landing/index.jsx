@@ -40,7 +40,7 @@ export const Landing = () => {
   }, []);
 
   return (
-    <Col lg={6} className="vw-100 mb-2">
+    <Col className="mb-2">
       <Row>
         <Col lg={9}>
           <Parameter timestamp={data.timestamp}/>
