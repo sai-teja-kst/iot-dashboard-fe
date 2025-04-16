@@ -24,7 +24,7 @@ import { useState } from "react";
 import "./index.css";
 import { ChatBot } from "./Pages/ChatBot";
 import { FaGear, FaMessage, FaScrewdriverWrench } from "react-icons/fa6";
-import { Plant } from "./Pages/Plant";
+import { Zone } from "./Pages/Zone";
 import { Tools } from "./Pages/Tools";
 
 function App() {
@@ -88,7 +88,7 @@ function App() {
               <Nav.Item>
                 <Nav.Link eventKey="chat">
                   <FaMessage /> <small>Chat</small>{" "}
-                  <Badge size="sm" className="bg-danger">
+                  <Badge size="sm" className="bg-dark">
                     Beta
                   </Badge>
                 </Nav.Link>
@@ -98,7 +98,7 @@ function App() {
                   onClick={() => setSubShow(!subshow)}
                   style={{ cursor: "pointer" }}
                 >
-                  <FaDatabase /> <small>Plants</small>{" "}
+                  <FaDatabase /> <small>Zone</small>{" "}
                   {subshow ? <FaAngleUp /> : <FaAngleDown />}
                 </Nav.Link>
               </Nav.Item>
@@ -146,16 +146,16 @@ function App() {
                 <ChatBot />
               </Tab.Pane>
               <Tab.Pane eventKey="plant1">
-                <Plant plant="Zone A" />
+                <Zone zone="A" />
               </Tab.Pane>
               <Tab.Pane eventKey="plant2">
-                <Plant plant="Zone B" />
+                <Zone zone="B" />
               </Tab.Pane>
               <Tab.Pane eventKey="plant3">
-                <Plant plant="Zone C" />
+                <Zone zone="C" />
               </Tab.Pane>
               <Tab.Pane eventKey="plant4">
-                <Plant plant="Zone D" />
+                <Zone zone="D" />
               </Tab.Pane>
               <Tab.Pane eventKey="tools">
                 <Tools />
@@ -200,6 +200,7 @@ function App() {
                 <FaGear /> D
               </NavDropdown.Item>
             </NavDropdown>
+
           </Nav>
         </div>
       </Tab.Container>

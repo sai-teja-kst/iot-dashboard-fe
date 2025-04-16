@@ -1,40 +1,20 @@
-import { useEffect, useState } from "react";
-import { Col, Container, Row, Form, Button, Card } from "react-bootstrap";
+import React, { useEffect, useState, Suspense, lazy } from "react";
+import { Col, Row, Form, Button, Spinner } from "react-bootstrap";
 import { GeneratePDF } from "../../Utils/GeneratePDF";
 import "./index.css";
-import { carData } from "../../Utils/CarInfo";
-import {
-  Speedometer2,
-  GeoAlt,
-  LightningCharge,
-  CurrencyRupee,
-  Calendar3,
-  Gear,
-} from "react-bootstrap-icons";
-import { BigData } from "../BigData";
 
-const CarTracker = ({vin}) => {
+const CarZoneData = lazy(() => import("../CarZoneData"));
 
-  useEffect(()=>{
-    setUserVin(vin);
-  },[vin])
-
-  const [pdftemplate, setPDFTemplate] = useState("");
+const CarTracker = ({ vin, zone }) => {
   const [userVin, setUserVin] = useState("");
+  const [pdftemplate, setPDFTemplate] = useState("");
   const [vehicleData, setVehicleData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const selectedCar = carData[pdftemplate];
-  const iconMap = {
-    model: <Gear className="me-2" />,
-    year: <Calendar3 className="me-2" />,
-    engine_capacity: <LightningCharge className="me-2" />,
-    maximum_speed: <Speedometer2 className="me-2" />,
-    maximum_power: <LightningCharge className="me-2" />,
-    price_range: <CurrencyRupee className="me-2" />,
-    region: <GeoAlt className="me-2" />,
-  };
+  useEffect(() => {
+    if (vin) setUserVin(vin);
+  }, [vin]);
 
   const fetchvin = async (e) => {
     e.preventDefault();
@@ -44,89 +24,62 @@ const CarTracker = ({vin}) => {
 
     try {
       const response = await fetch(
-        `https://${process.env.REACT_APP_BACKEND_URI}/api/v1/vehicle/get?vin=${vin}`
+        `${process.env.REACT_APP_BACKEND_URI}/api/v1/vehicle/car?zone=${zone}&vin=${userVin}`
       );
       if (!response.ok) {
         throw new Error("VIN not found or invalid");
       }
       const data = await response.json();
       setVehicleData(data);
-      setPDFTemplate(data.model);
+      setPDFTemplate(data.model || "");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Error fetching vehicle");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-      <Row className=" border rounded border-primary m-2">
-        <Col xs={12} lg={2} className="bg-primary border rounded bg-gradient p-2">
-          <Form onSubmit={fetchvin}>
-            <h2>Filter Data</h2>
-            <Form.Label size="sm">VIN</Form.Label>
-            <Form.Control
-              size="sm"
-              type="text"
-              id="vin"
-              minLength={18}
-              maxLength={18}
-              placeholder="Enter 18 Vehicle Identification Number"
-              value={userVin}
-              onChange={(e)=>(setUserVin(e.target.value))}
-            />
-            <Button type="submit" variant="dark" className="mt-2">Fetch VIN</Button>
-          </Form>
-          {loading && <p className="mt-4">Loading...</p>}
-          {error && <p className="mt-4 text-danger">{error}</p>}
-          {vehicleData && (
-            <Button className="mt-2" onClick={() => GeneratePDF("pdf")}>
-              Download PDF
-            </Button>
-          )}
-        </Col>
+    <Row className="border rounded m-1 bg-primary text-light">
+      <Col xs={12} lg={2} className="p-2">
+        <Form onSubmit={fetchvin}>
+          <h2>Filter Data</h2>
+          <Form.Label size="sm">VIN</Form.Label>
+          <Form.Control
+            size="sm"
+            type="text"
+            id="vin"
+            minLength={18}
+            maxLength={18}
+            placeholder="Enter 18-character VIN"
+            value={userVin}
+            onChange={(e) => setUserVin(e.target.value)}
+          />
+          <Button
+            type="submit"
+            variant="dark"
+            className="mt-2"
+            disabled={userVin.length !== 18}
+          >
+            Fetch VIN
+          </Button>
+        </Form>
 
-        <Col xs={12} lg={9}>
-          <BigData/>
-        </Col>
-
-        {pdftemplate && (
-          <Col xs={12}>
-            <Container
-              id="pdf"
-              className={`border border-secondary ${pdftemplate}`}
-            >
-              <Row>
-                <Col xs={6}>
-                  <div>
-                    <p>Current Data</p>
-                  </div>
-                </Col>
-
-                <Col xs={6}>
-                  <Card className="car-card mb-2" style={{ maxWidth: "100%" }}>
-                    <p>approval status</p>
-                  </Card>
-
-                  <Row className="g-3">
-                    {Object.entries(selectedCar).map(([key, value]) => (
-                      <Col xs={12} md={6} key={key}>
-                        <Card className="p-3 car-card">
-                          <div className="d-flex align-items-center mb-1 text-uppercase small fw-semibold">
-                            {iconMap[key] || <Gear className="me-2" />}
-                            {key.replace(/_/g, " ")}
-                          </div>
-                          <div className="fs-5 fw-medium">{value}</div>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                </Col>
-              </Row>
-            </Container>
-          </Col>
+        {loading && <Spinner animation="border" className="mt-3" />}
+        {error && <p className="mt-3 text-danger">{error}</p>}
+        {vehicleData && (
+          <Button className="mt-3" variant="outline-danger" onClick={() => GeneratePDF("pdf")}>
+            Download PDF
+          </Button>
         )}
-      </Row>
+      </Col>
+
+      <Col xs={12} lg={10}>
+        <Suspense fallback={<div>Loading CarZoneData...</div>}>
+          <CarZoneData zone={zone} pdftemplate={pdftemplate} filteredVehicle={vehicleData} />
+        </Suspense>
+      </Col>
+    </Row>
   );
 };
 
