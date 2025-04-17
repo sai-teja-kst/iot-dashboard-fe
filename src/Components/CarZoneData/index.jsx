@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { FixedSizeList as List } from "react-window";
-import { Container, Spinner, Button } from "react-bootstrap";
+import { Container, Spinner, Button, Toast } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
 import { CarPDFGenerator } from "../CarPDFGenerator";
+import { GeneratePDF } from "../../Utils/GeneratePDF";
 
 const COLUMN_WIDTHS = ["5%", "20%", "20%", "20%", "10%", "15%", "10%"];
 
 const CarZoneData = ({ zone, filteredVehicle, pdftemplate }) => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     if (filteredVehicle) {
@@ -30,6 +32,15 @@ const CarZoneData = ({ zone, filteredVehicle, pdftemplate }) => {
       });
   }, [zone, filteredVehicle]);
 
+  const handleDownload = async () => {
+    try {
+      await GeneratePDF("pdf");
+      setShowToast(true);
+    } catch (err) {
+      console.error("Failed to generate PDF:", err);
+    }
+  };
+
   const Row = ({ index, style }) => {
     const vehicle = vehicles[index];
     return (
@@ -44,7 +55,12 @@ const CarZoneData = ({ zone, filteredVehicle, pdftemplate }) => {
         <div style={{ width: COLUMN_WIDTHS[4] }}>{vehicle.model}</div>
         <div style={{ width: COLUMN_WIDTHS[5] }}>{vehicle.status}</div>
         <div style={{ width: COLUMN_WIDTHS[6] }}>
-          <Button variant="dark" size="sm">
+          <Button
+            variant="dark"
+            size="sm"
+            onClick={handleDownload}
+            disabled={!filteredVehicle}
+          >
             <FaDownload size={10} />
           </Button>
         </div>
@@ -82,9 +98,25 @@ const CarZoneData = ({ zone, filteredVehicle, pdftemplate }) => {
         </List>
       </div>
 
+      {filteredVehicle && (
+        <CarPDFGenerator pdftemplate={pdftemplate} vehicledata={filteredVehicle} />
+      )}
 
-    <CarPDFGenerator pdftemplate={pdftemplate} vehicledata={filteredVehicle}/>
-
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        delay={3000}
+        autohide
+        style={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          backgroundColor: "#28a745",
+          color: "#fff",
+        }}
+      >
+        <Toast.Body>✅ PDF downloaded successfully!</Toast.Body>
+      </Toast>
     </Container>
   );
 };
