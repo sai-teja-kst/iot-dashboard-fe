@@ -29,7 +29,7 @@ export const CarPDFGenerator = ({ pdftemplate, vehicledata }) => {
         <Col xs={12}>
           <Container
             id="pdf"
-            className={`border border-secondary d-none ${pdftemplate}`}
+            className={`border border-secondary ${pdftemplate}`}
           >
             <Row>
               <Col xs={12} md={6}>

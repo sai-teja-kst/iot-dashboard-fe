@@ -39,6 +39,21 @@ const CarTracker = ({ vin, zone }) => {
     }
   };
 
+  const handleDownload = async () => {
+    try {
+      const pdfUrl = await GeneratePDF("pdf");
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = "Report.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("PDF Generation Failed:", error.message);
+      alert("Failed to generate PDF. Please check the console for details.");
+    }
+  };
+
   return (
     <Row className="border rounded m-1 bg-primary text-light">
       <Col xs={12} lg={2} className="p-2">
@@ -68,7 +83,7 @@ const CarTracker = ({ vin, zone }) => {
         {loading && <Spinner animation="border" className="mt-3" />}
         {error && <p className="mt-3 text-danger">{error}</p>}
         {vehicleData && (
-          <Button className="mt-3" variant="outline-danger" onClick={() => GeneratePDF("pdf")}>
+          <Button className="mt-3" variant="outline-s" onClick={() => handleDownload()}>
             Download PDF
           </Button>
         )}
